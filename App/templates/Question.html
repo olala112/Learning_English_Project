@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trắc nghiệm</title>
+</head>
+<body>
+    <form action="/submit" method="post">
+        {% for question in questions %}
+            <p>{{ question[1] }}</p>
+            <input type="radio" name="{{ question[0] }}" value="A"> {{ question[2] }}<br>
+            <input type="radio" name="{{ question[0] }}" value="B"> {{ question[3] }}<br>
+            <input type="radio" name="{{ question[0] }}" value="C"> {{ question[4] }}<br>
+            <input type="radio" name="{{ question[0] }}" value="D"> {{ question[5] }}<br><br>
+        {% endfor %}
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>
