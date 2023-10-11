@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Danh sách Bộ môn</title>
+    <title>Danh sách âm thanh</title>
 </head>
 <body>
-    <h1>Danh sách Bộ môn</h1>
+    <h1>Danh sách âm thanh</h1>
     <ul>
-        {% for row in rows %}
-            <li>{{ row }}</li>
+        {% for audio in audio_files %}
+            <li><a href="{{ url_for('play_audio', audio_id=audio[0]) }}">File {{ audio[0] }}</a></li>
         {% endfor %}
     </ul>
 </body>
