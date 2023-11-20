@@ -176,10 +176,10 @@ WHERE
 SELECT 
     Part1.IDPart1,
     QUESTION.LinkQUESTION,
-    QUESTION.A,
-    QUESTION.B,
-    QUESTION.C,
-    QUESTION.D,
+    QUESTION.A AS OptionA,
+    QUESTION.B AS OptionB,
+    QUESTION.C AS OptionC,
+    QUESTION.D AS OptionD,
     QUESTION.ANSWER,
     PICTURE.LinkPicture,
     AUDIO.LinkAudio
@@ -192,25 +192,24 @@ JOIN
 JOIN 
     AUDIO ON Part1.IDAudio = AUDIO.IDAudio
 WHERE 
-    Part1.IDEXAM = 1;
+    Part1.IDEXAM = 1 AND QUESTION.IDQUESTION BETWEEN 1001 AND 1006;
+
 	-- Truy vấn thông tin từng Part2 của một đề (ví dụ: IDEXAM = 1)
 SELECT 
     Part2.IDPart2,
     Part2.PointPart2,
+	QUESTION.IDQuestion,
     QUESTION.LinkQUESTION AS Question_Link,
     QUESTION.A AS Option_A,
     QUESTION.B AS Option_B,
     QUESTION.C AS Option_C,
     QUESTION.D AS Option_D,
     QUESTION.ANSWER AS Correct_Answer,
-    PICTURE.LinkPicture AS Picture_Link,
     AUDIO.LinkAudio AS Audio_Link
 FROM 
     Part2
 JOIN 
     QUESTION ON Part2.IDQUESTION = QUESTION.IDQUESTION
-JOIN 
-    PICTURE ON Part2.IDPicture = PICTURE.IDPicture
 JOIN 
     AUDIO ON Part2.IDAudio = AUDIO.IDAudio
 WHERE 
@@ -220,6 +219,7 @@ ORDER BY IDPart2;
 SELECT 
     Part3.IDPart3,
     Part3.PointPart3,
+    QUESTION.IDQuestion,
     QUESTION.LinkQUESTION AS Question_Link,
     QUESTION.A AS Option_A,
     QUESTION.B AS Option_B,
@@ -232,17 +232,19 @@ FROM
     Part3
 JOIN 
     QUESTION ON Part3.IDQUESTION = QUESTION.IDQUESTION
-JOIN 
+LEFT JOIN 
     PICTURE ON Part3.IDPicture = PICTURE.IDPicture
 JOIN 
     AUDIO ON Part3.IDAudio = AUDIO.IDAudio
 WHERE 
-    Part3.IDEXAM = 1
-ORDER BY IDPart3;
--- Truy vấn thông tin từng Part4 của một đề (ví dụ: IDEXAM = 1)
+    Part3.IDEXAM = 1 OR Part3.IDPicture IS NULL  -- Include rows where Part3.IDPicture is NULL
+ORDER BY 
+    Part3.IDPart3;
+--Part4
 SELECT 
     Part4.IDPart4,
     Part4.PointPart4,
+    QUESTION.IDQuestion,
     QUESTION.LinkQUESTION AS Question_Link,
     QUESTION.A AS Option_A,
     QUESTION.B AS Option_B,
@@ -255,56 +257,49 @@ FROM
     Part4
 JOIN 
     QUESTION ON Part4.IDQUESTION = QUESTION.IDQUESTION
-JOIN 
+LEFT JOIN 
     PICTURE ON Part4.IDPicture = PICTURE.IDPicture
 JOIN 
     AUDIO ON Part4.IDAudio = AUDIO.IDAudio
 WHERE 
-    Part4.IDEXAM = 1
-ORDER BY IDPart4;
+    Part4.IDEXAM = 1 OR Part4.IDPicture IS NULL  -- Include rows where Part3.IDPicture is NULL
+ORDER BY 
+    Part4.IDPart4;
 -- Truy vấn thông tin từng Part5 của một đề (ví dụ: IDEXAM = 1)
 SELECT 
     Part5.IDPart5,
     Part5.PointPart5,
+	QUESTION.IDQuestion,
     QUESTION.LinkQUESTION AS Question_Link,
     QUESTION.A AS Option_A,
     QUESTION.B AS Option_B,
     QUESTION.C AS Option_C,
     QUESTION.D AS Option_D,
-    QUESTION.ANSWER AS Correct_Answer,
-    PICTURE.LinkPicture AS Picture_Link,
-    AUDIO.LinkAudio AS Audio_Link
-FROM 
-    Part5
+    QUESTION.ANSWER AS Correct_Answer
+FROM Part5
 JOIN 
     QUESTION ON Part5.IDQUESTION = QUESTION.IDQUESTION
-JOIN 
-    PICTURE ON Part5.IDPicture = PICTURE.IDPicture
-JOIN 
-    AUDIO ON Part5.IDAudio = AUDIO.IDAudio
 WHERE 
-    Part5.IDEXAM = 1
+    Part5.IDEXAM = 1 AND Part5.IDQUESTION BETWEEN 1101 AND 1030;
 ORDER BY IDPart5;
 -- Truy vấn thông tin từng Part6 của một đề (ví dụ: IDEXAM = 1)
 SELECT 
     Part6.IDPart6,
     Part6.PointPart6,
+	QUESTION.IDQuestion,
     QUESTION.LinkQUESTION AS Question_Link,
     QUESTION.A AS Option_A,
     QUESTION.B AS Option_B,
     QUESTION.C AS Option_C,
     QUESTION.D AS Option_D,
     QUESTION.ANSWER AS Correct_Answer,
-    PICTURE.LinkPicture AS Picture_Link,
-    AUDIO.LinkAudio AS Audio_Link
+    PICTURE.LinkPicture AS Picture_Link
 FROM 
     Part6
 JOIN 
     QUESTION ON Part6.IDQUESTION = QUESTION.IDQUESTION
 JOIN 
     PICTURE ON Part6.IDPicture = PICTURE.IDPicture
-JOIN 
-    AUDIO ON Part6.IDAudio = AUDIO.IDAudio
 WHERE 
     Part6.IDEXAM = 1
 ORDER BY IDPart6;
@@ -407,6 +402,40 @@ SELECT
     PassWord
 FROM
     User1;
+CREATE TABLE Vocabulary (
+    WordID INT PRIMARY KEY IDENTITY(1,1),
+    EnglishWord NVARCHAR(255) NOT NULL,
+    VietnameseDefinition NVARCHAR(MAX),
+    PartOfSpeech NVARCHAR(50),
+    ExampleSentence NVARCHAR(MAX)
+);
 
 
+--Lấy danh sách tất cả các từ vựng trong cơ sở dữ liệu:
+SELECT * FROM Vocabulary;
+--Lấy danh sách 10 từ vựng tiếng Anh và định nghĩa tương ứng:
+SELECT EnglishWord, VietnameseDefinition FROM Vocabulary LIMIT 10;
+--Lọc các từ chỉ là danh từ:
+SELECT * FROM Vocabulary WHERE PartOfSpeech = 'Noun';
+--Sắp xếp các từ theo thứ tự bảng chữ cái:
+SELECT * FROM Vocabulary ORDER BY EnglishWord;
+--Tìm kiếm các từ chứa từ "construction":
+SELECT * FROM Vocabulary WHERE EnglishWord LIKE '%construction%';
 
+
+        SELECT
+            P.IDPart1,
+            P.PointPart1,
+            P.IDAudio,
+            A.LinkAudio,
+            P.IDPicture,
+            Pic.LinkPicture,
+            P.IDQUESTION
+        FROM
+            Part1 P
+        LEFT JOIN
+            AUDIO A ON P.IDAudio = A.IDAudio
+        LEFT JOIN
+            PICTURE Pic ON P.IDPicture = Pic.IDPicture
+        WHERE
+            P.IDQUESTION BETWEEN 110001 AND 110006

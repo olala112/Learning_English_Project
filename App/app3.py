@@ -13,7 +13,7 @@ cursor = conn.cursor()
 cursor1 = conn.cursor()
 
 # Thực hiện truy vấn
-cursor1.execute("SELECT LinkAudio FROM AUDIO WHERE IDAudio = 01")
+cursor1.execute("SELECT LinkAudio FROM AUDIO WHERE IDAudio = 100000")
 
 # Lấy kết quả
 result1 = cursor1.fetchone()

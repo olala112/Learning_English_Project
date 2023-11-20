@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOEIC Part 1 Practice</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .question-container {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>TOEIC Part 1 Practice</h1>
+
+<div id="question-container" class="question-container">
+    {% for question in part1_data %}
+        <h3>Question {{ question.IDPart1 }}:</h3>
+        <p>{{ question.LinkQUESTION }}</p>
+        
+        <!-- Hiển thị Audio -->
+        <audio controls>
+            <source src="{{ question.LinkAudio }}" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+
+        <!-- Hiển thị Picture -->
+        <img src="{{ question.LinkPicture }}" alt="Question Image" style="max-width: 100%; height: auto;">
+    {% endfor %}
+</div>
+
+</body>
+</html>

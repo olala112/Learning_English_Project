@@ -10,7 +10,7 @@ conn = pyodbc.connect('DRIVER={SQL Server};'
 cursor1 = conn.cursor()
 
 # Thực hiện truy vấn
-cursor1.execute("SELECT LinkAudio FROM AUDIO WHERE IDAudio = 01")
+cursor1.execute("SELECT LinkAudio FROM AUDIO WHERE IDAudio = ?")
 
 # Lấy kết quả
 result1 = cursor1.fetchone()
