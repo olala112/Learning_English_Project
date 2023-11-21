@@ -28,10 +28,10 @@ def home():
                 'PartOfSpeech': result.PartOfSpeech,
                 'ExampleSentence': result.ExampleSentence
             }
-            return render_template('index3.html', result=result_dict)
+            return render_template('Vocabulary.html', result=result_dict)
         else:
-            return render_template('index3.html', message='Word not found!')
-    return render_template('index3.html')
+            return render_template('Vocabulary.html', message='Word not found!')
+    return render_template('Vocabulary.html')
 
 if __name__ == '__main__':
     app.run(debug=True)

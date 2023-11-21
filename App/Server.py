@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, send_from_directory,send_file
+from flask import Flask, render_template, request, send_from_directory, send_file
 
 import pyodbc
 app = Flask(__name__)
@@ -10,6 +10,28 @@ conn = pyodbc.connect('DRIVER={SQL Server};'
                       'Trusted_Connection=yes;')  # Sử dụng Trusted_Connection=yes nếu bạn đang sử dụng xác thực Windows
 
 cursor = conn.cursor()
+
+@app.route('/Vocabulary', methods=['GET', 'POST'])
+def home():
+    if request.method == 'POST':
+        search_word = request.form['search_word']
+        
+        # Thực hiện truy vấn SQL để lấy thông tin từ cơ sở dữ liệu (đoạn code 2)
+        cursor.execute(f"SELECT * FROM Vocabulary WHERE EnglishWord = '{search_word}'")
+        result = cursor.fetchone()
+        
+        if result:
+            # Chuyển kết quả từ tuple sang dictionary để dễ sử dụng trong template (đoạn code 2)
+            result_dict = {
+                'EnglishWord': result.EnglishWord,
+                'VietnameseDefinition': result.VietnameseDefinition,
+                'PartOfSpeech': result.PartOfSpeech,
+                'ExampleSentence': result.ExampleSentence
+            }
+            return render_template('Vocabulary.html', result=result_dict)
+        else:
+            return render_template('Vocabulary.html', message='Word not found!')
+    return render_template('Vocabulary.html')
 #Part1
 # Truy vấn SQL
 query = """
@@ -286,5 +308,6 @@ for row in part6_data:
 @app.route('/Part6')
 def index5():
     return render_template('Part6.html', part6_data=part6_data)
+
 if __name__ == '__main__':
     app.run(debug=True)
