@@ -17,7 +17,7 @@ def index():
 
 @app.route('/User')
 def User():
-    #Truy vấn điểm từ DataBases
+    #Truy vấn thông tin User từ DataBases
         cursor.execute("SELECT IDUser, Name, SEX, Achievement FROM User1 WHERE IDUser = 10")
         User = cursor.fetchone()
         #PointExams = cursor.fetchone()
